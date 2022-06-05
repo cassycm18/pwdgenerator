@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 #Usage : password generator
 # file create date: 26-May-2022
-# last update: 02-Jun-2022
+# last update: 04-Jun-2022
 # created by: YN Ng
 # Requirement: 
 # password length min 12
 # password must start with capital and end with digit
-# Added ability to save the password into a txt file
+# History : 02-Jun-2022 Added ability to save the password into a txt file
+# 04-Jun-2022 modify code method to print  
 
 # Modules imported
 import string
@@ -51,7 +52,7 @@ def validate_int(inputvalue, choice, minvalue):
 		print("Please input integer only...")
 		while True:
 			try:
-				inputvalue = int(input("Enter " + questions[choice]+ ": "))
+				inputvalue = int(input(f"Enter {questions[choice]} : "))
 				#print("user input value should at least ", minvalue)
 				return inputvalue		
 			except ValueError:
@@ -65,8 +66,8 @@ def validate_criteria(uservalue, choice, policyvalue):
 	choice = int(choice)
 	policyvalue = int(policyvalue)
 	while uservalue < policyvalue:
-		print(questions[choice] +  "....")
-		uservalue =  validate_int(input("Enter " + questions[choice] + ": "), choice, policyvalue)
+		print(f"{questions[choice]}....")
+		uservalue =  validate_int(input(f"Enter {questions[choice]} : "), choice, policyvalue)
 		if uservalue >= policyvalue:
 			return uservalue		
 	#print("value detected from user  is " , uservalue)	
@@ -74,16 +75,16 @@ def validate_criteria(uservalue, choice, policyvalue):
 
 def generate_random_password():
 	## Get length of password from the user
-	pwd_length = validate_int(input("Enter " + questions[pwd_choice] + " : ") or min_pwdlength, pwd_choice, min_pwdlength)
+	pwd_length = validate_int(input(f"Enter {questions[pwd_choice]}: ") or min_pwdlength, pwd_choice, min_pwdlength)
 	
 	## number of character types
-	alphabets_count = validate_int(input("Enter " + questions[alpha_choice] + " : ") or min_alphacount, alpha_choice, min_alphacount)
+	alphabets_count = validate_int(input(f"Enter {questions[alpha_choice]}: ") or min_alphacount, alpha_choice, min_alphacount)
 		
 	## number of digits types
-	digits_count = validate_int(input("Enter " + questions[digits_choice] + " : ") or min_digitscount, digits_choice, min_digitscount)
+	digits_count = validate_int(input(f"Enter {questions[digits_choice]}: ") or min_digitscount, digits_choice, min_digitscount)
 
 	## number of special characters types
-	special_characters_count = validate_int(input("Enter " + questions[specialcharacter_choice] + " : ") or min_specialcharacter, specialcharacter_choice, min_specialcharacter)
+	special_characters_count = validate_int(input(f"Enter {questions[specialcharacter_choice]}: ") or min_specialcharacter, specialcharacter_choice, min_specialcharacter)
 
 
 	characters_count = alphabets_count + digits_count + special_characters_count
@@ -146,25 +147,27 @@ def generate_random_password():
 	## printing the list
 	password_created = "".join(finalpassword)
 	#print("".join(finalpassword))
-	print("length of the password is ", len(finalpassword))
+	print(f"length of the password is {len(finalpassword)}")
 	#print("password created as ", password_created)
 
 
 	## Save the password into file
 	ans = input("Do you want to save the file (default Yes)? ") or "Y"
 	if ans.upper() == "Y" or ans.upper() == "YES":
+		# set timestamp the password generator	
 		today = datetime.datetime.now()
+		timestamp = today.strftime("%d/%m/%Y %X")  
 
 		#create if the file not exit otherwise append into the file
 		f = open(filename, "a")
-		f.writelines([today.strftime("%d/%m/%Y %X"), "\t", password_created, "\n"])
+		f.writelines([timestamp, "\t", password_created, "\n"])
 		f.close()
 		
 		#Open and read the content after append:
 		f = open(filename, "r")
-		print("The password save into filename : ", filename, "\n", f.read())		
+		print(f"The password save into filename : {filename} \n {f.read()}")		
 	else:
 		print("the password not save into file")
-		print("password generated as asked: ", password_created)
+		print(f"password generated as asked: {password_created}")
 ## invoking the function
 generate_random_password()
